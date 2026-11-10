@@ -196,3 +196,25 @@
     height: 44px;
   }
 }
+@media (max-width: 600px) {
+  .sidebar {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  .sidebar.extended {
+    width: 220px;
+  }
+
+  .sidebar.collapsed {
+    width: 55px;
+  }
+
+  .sidebar .new-chat {
+    margin-top: 20px;
+  }
+
+  .sidebar .recent {
+    max-height: 55vh;
+  }
+}

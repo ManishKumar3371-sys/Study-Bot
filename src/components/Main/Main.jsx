@@ -5,7 +5,7 @@ import "./Main.css";
 import { assets } from "../../assets/assets.js";
 import { Context } from "../../context/context.js";
 
-const Main = () => {
+const Main = ({ darkMode, setDarkMode }) => {
     const { onSent, recentPrompt, showResult, loading, resultData, setInput, input } = useContext(Context);
     const resultRef = useRef(null);
     const [rows, setRows] = useState(1);
@@ -42,9 +42,18 @@ const Main = () => {
     return (
         <main className="main">
             <nav className="nav">
-                <p>Study Buddy</p>
-                <img src={assets.user_icon} alt="User" />
-            </nav>
+    <p>Study Buddy</p>
+    <div className="nav-actions">
+        <button
+            className="theme-toggle"
+            onClick={() => setDarkMode(!darkMode)}
+            type="button"
+        >
+            {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+        </button>
+        <img src={assets.user_icon} alt="User" />
+    </div>
+</nav>
 
             <div className="main-container">
                 {!showResult ? (
