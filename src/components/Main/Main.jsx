@@ -14,7 +14,6 @@ import {
   LightbulbIcon,
   CodeIcon,
   BookOpenIcon,
-  ExternalLinkIcon,
   UserIcon,
   BotIcon
 } from "../Icons/Icons.jsx";
@@ -113,17 +112,6 @@ const Main = ({ darkMode, setDarkMode }) => {
         </div>
 
         <div className="nav-actions">
-          <a
-            href="https://manish-portfolio-react-ten.vercel.app/"
-            target="_blank"
-            rel="noreferrer"
-            className="portfolio-pill"
-            title="Portfolio of Manish Kumar"
-          >
-            <span>Portfolio</span>
-            <ExternalLinkIcon size={13} />
-          </a>
-
           <button
             className="theme-toggle-btn"
             onClick={() => setDarkMode(!darkMode)}
@@ -134,15 +122,12 @@ const Main = ({ darkMode, setDarkMode }) => {
             {darkMode ? <SunIcon size={18} /> : <MoonIcon size={18} />}
           </button>
 
-          <a
-            href="https://github.com/ManishKumar3371-sys/Study-Bot"
-            target="_blank"
-            rel="noreferrer"
+          <div
             className="nav-avatar"
-            title="Developed by Manish Kumar"
+            title="User Profile"
           >
             <UserIcon size={18} />
-          </a>
+          </div>
         </div>
       </nav>
 

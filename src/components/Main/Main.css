@@ -70,27 +70,6 @@
   gap: 12px;
 }
 
-.portfolio-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 13px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--primary-accent);
-  background: var(--btn-hover-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 9999px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.portfolio-pill:hover {
-  transform: translateY(-1px);
-  border-color: var(--primary-accent);
-  box-shadow: var(--shadow-sm);
-}
-
 .theme-toggle-btn {
   width: 38px;
   height: 38px;

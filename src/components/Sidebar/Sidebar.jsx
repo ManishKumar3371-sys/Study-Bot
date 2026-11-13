@@ -89,10 +89,7 @@ const Sidebar = () => {
             {extended && <span>Help & Shortcuts</span>}
           </button>
 
-          <a
-            href="https://study-bot-sandy.vercel.app/"
-            target="_blank"
-            rel="noreferrer"
+          <div
             className="bottom-item"
             title="System Status"
           >
@@ -102,7 +99,7 @@ const Sidebar = () => {
                 System Active <span className="status-dot"></span>
               </span>
             )}
-          </a>
+          </div>
         </div>
       </aside>
 
