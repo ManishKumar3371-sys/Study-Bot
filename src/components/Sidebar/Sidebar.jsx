@@ -1,58 +1,156 @@
-import React, {useContext, useState} from 'react';
-import './Sidebar.css';
-import {assets} from '../../assets/assets';
-import { Context } from '../../context/context.js';
+import React, { useContext, useState } from "react";
+import "./Sidebar.css";
+import { Context } from "../../context/context.js";
+import {
+  MenuIcon,
+  PlusIcon,
+  MessageSquareIcon,
+  TrashIcon,
+  HelpCircleIcon,
+  ActivityIcon,
+  SparklesIcon,
+} from "../Icons/Icons.jsx";
 
 const Sidebar = () => {
-    const [extended, setExtended] = useState(false);
-    const {onSent, prevPrompts, setRecentPrompt, newChat} = useContext(Context);
+  const [extended, setExtended] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const { onSent, prevPrompts, setRecentPrompt, newChat, clearHistory } = useContext(Context);
 
-    const loadPrompt = async (prompt) => {
-        setRecentPrompt(prompt)
-        await onSent(prompt)
-    }
-    return (
-        <aside className={`sidebar ${extended ? 'extended' : 'collapsed'}`}>
-            <div className={`top  ${extended ? '' : 'centered'}`}>
-                <div className="menu" onClick={() => setExtended(prev => !prev)}>
-                    <img src={assets.menu_icon} alt="Menu Icon"/>
-                </div>
-                <div onClick={() => newChat()} className="new-chat">
-                    <img src={assets.plus_icon} alt="Plus Icon"/>
-                    <p className={`${extended ? 'block' : 'none'}`}>New Chat</p>
-                </div>
-                {extended ?
-                    <div className="recent">
-                        <p className="recent-title">Recent</p>
-                        {prevPrompts.map((item) => {
-                            return (
-                                <div onClick={() => loadPrompt(item)} className="recent-entry" key={item}>
-                                    <img src={assets.message_icon} alt=""/>
-                                    <p className="recent-entry-p">{item.slice(0, 18)} ...</p>
-                                </div>
-                            )
-                        })}
+  const loadPrompt = async (prompt) => {
+    setRecentPrompt(prompt);
+    await onSent(prompt);
+  };
 
+  return (
+    <>
+      <aside className={`sidebar ${extended ? "extended" : "collapsed"}`}>
+        <div className="top">
+          <button
+            className="menu-btn"
+            onClick={() => setExtended((prev) => !prev)}
+            aria-label="Toggle Navigation Sidebar"
+            title="Toggle Menu"
+          >
+            <MenuIcon size={20} />
+          </button>
+
+          <button
+            onClick={() => newChat()}
+            className="new-chat-btn"
+            title="Start New Chat"
+          >
+            <PlusIcon size={18} />
+            {extended && <span>New Chat</span>}
+          </button>
+
+          {extended && (
+            <div className="recent-section">
+              <div className="recent-header">
+                <span className="recent-title">Recent Chats</span>
+                {prevPrompts.length > 0 && (
+                  <button
+                    onClick={clearHistory}
+                    className="clear-history-btn"
+                    title="Clear history"
+                  >
+                    <TrashIcon size={14} />
+                  </button>
+                )}
+              </div>
+
+              <div className="recent-list">
+                {prevPrompts.length === 0 ? (
+                  <p className="empty-history">No recent queries yet</p>
+                ) : (
+                  prevPrompts.map((item, idx) => (
+                    <div
+                      onClick={() => loadPrompt(item)}
+                      className="recent-entry"
+                      key={`${item}-${idx}`}
+                      title={item}
+                    >
+                      <MessageSquareIcon size={16} className="entry-icon" />
+                      <span className="recent-text">{item}</span>
                     </div>
-                    : null
-                }
+                  ))
+                )}
+              </div>
             </div>
-            <div className={`bottom  ${extended ? '' : 'centered'}`}>
-                <div className="bottom-item recent-entry">
-                    <img src={assets.question_icon} alt="Question Icon"/>
-                    <p className={`fade ${extended ? 'block' : 'none'}`}>Help</p>
+          )}
+        </div>
+
+        <div className="bottom">
+          <button
+            className="bottom-item"
+            onClick={() => setShowHelpModal(true)}
+            title="Help & Shortcuts"
+          >
+            <HelpCircleIcon size={19} />
+            {extended && <span>Help & Shortcuts</span>}
+          </button>
+
+          <a
+            href="https://study-bot-sandy.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="bottom-item"
+            title="System Status"
+          >
+            <ActivityIcon size={19} />
+            {extended && (
+              <span className="status-badge-wrap">
+                System Active <span className="status-dot"></span>
+              </span>
+            )}
+          </a>
+        </div>
+      </aside>
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <div className="modal-backdrop" onClick={() => setShowHelpModal(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-brand">
+                <div className="brand-badge">
+                  <SparklesIcon size={18} />
                 </div>
-                <div className="bottom-item recent-entry">
-                    <img src={assets.history_icon} alt="History Icon"/>
-                    <p className={`fade ${extended ? 'block' : 'none'}`}>Activity</p>
-                </div>
-                <div className="bottom-item recent-entry">
-                    <img src={assets.setting_icon} alt="Settings Icon"/>
-                    <p className={`fade ${extended ? 'block' : 'none'}`}>Settings</p>
-                </div>
+                <h3>Study Buddy Help & Info</h3>
+              </div>
+              <button
+                className="close-modal"
+                onClick={() => setShowHelpModal(false)}
+              >
+                ✕
+              </button>
             </div>
-        </aside>
-    );
-}
+            <div className="modal-body">
+              <p className="modal-desc">
+                Study Buddy is an AI-powered academic assistant engineered to simplify complex subjects, draft quizzes, explain code algorithms, and enhance self-learning.
+              </p>
+              <div className="shortcut-group">
+                <h4>Quick Tips</h4>
+                <ul>
+                  <li><strong>Enter:</strong> Send message</li>
+                  <li><strong>Shift + Enter:</strong> Add new line in prompt</li>
+                  <li><strong>Prompt Cards:</strong> Click any preset idea on home screen to get instant study answers.</li>
+                  <li><strong>Copy Code/Answer:</strong> Use the copy button in top right of AI response.</li>
+                </ul>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn-primary"
+                onClick={() => setShowHelpModal(false)}
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
 export default Sidebar;
