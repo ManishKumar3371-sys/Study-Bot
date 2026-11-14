@@ -15,37 +15,38 @@ import {
   CodeIcon,
   BookOpenIcon,
   UserIcon,
-  BotIcon
+  BotIcon,
+  MenuIcon
 } from "../Icons/Icons.jsx";
 
 const SUGGESTIONS = [
   {
-    title: "DSA & Problem Solving",
-    desc: "Explain Dijkstra's Algorithm with step-by-step example and C++ code",
+    title: "Data Structures & Algorithms",
+    desc: "Explain Dijkstra's Algorithm with step-by-step logic, complexity, and clean code",
     prompt: "Explain Dijkstra's algorithm step-by-step with real intuition, time complexity, and clean C++ implementation.",
     icon: CodeIcon,
   },
   {
-    title: "System Design & Concepts",
-    desc: "How does DNS resolution and Web Caching work under the hood?",
-    prompt: "How does DNS resolution and web caching work step-by-step when typing a URL in the browser?",
+    title: "System Design & Networking",
+    desc: "What happens behind the scenes when you enter a URL in a browser?",
+    prompt: "How does DNS resolution, TCP handshake, and HTTP/HTTPS caching work step-by-step when typing a URL in the browser?",
     icon: CompassIcon,
   },
   {
-    title: "Exam Preparation & Quiz",
-    desc: "Generate a 5-question interactive quiz on Operating Systems & Deadlocks",
-    prompt: "Generate an interactive 5-question multiple choice quiz on Operating Systems & Deadlock conditions with detailed answers.",
+    title: "Operating Systems",
+    desc: "Generate an interactive 5-question multiple choice quiz on Deadlocks & Process Scheduling",
+    prompt: "Generate an interactive 5-question multiple choice quiz on Operating Systems & Deadlock conditions with clear answers and explanations.",
     icon: BookOpenIcon,
   },
   {
-    title: "Core Subject Summaries",
-    desc: "Explain Database Normalization (1NF, 2NF, 3NF, BCNF) simply",
+    title: "Database Management",
+    desc: "Explain Database Normalization (1NF to BCNF) simply with schema examples",
     prompt: "Explain Database Normalization (1NF, 2NF, 3NF, BCNF) with clear tables, anomalies, and realistic examples.",
     icon: LightbulbIcon,
   },
 ];
 
-const Main = ({ darkMode, setDarkMode }) => {
+const Main = ({ darkMode, setDarkMode, setSidebarOpen }) => {
   const { onSent, recentPrompt, showResult, loading, resultData, setInput, input } =
     useContext(Context);
   const resultRef = useRef(null);
@@ -62,7 +63,7 @@ const Main = ({ darkMode, setDarkMode }) => {
     setInput(e.target.value);
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 180)}px`;
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 160)}px`;
     }
   };
 
@@ -101,13 +102,24 @@ const Main = ({ darkMode, setDarkMode }) => {
     <main className="main">
       {/* Top Navbar */}
       <nav className="nav">
-        <div className="nav-brand">
-          <div className="brand-icon-wrapper">
-            <SparklesIcon size={20} />
-          </div>
-          <div className="brand-text">
-            <span className="brand-name">Study Buddy</span>
-            <span className="brand-badge-ai">AI 3.5</span>
+        <div className="nav-left">
+          <button 
+            type="button" 
+            className="mobile-menu-trigger"
+            onClick={() => setSidebarOpen(prev => !prev)}
+            aria-label="Open sidebar menu"
+          >
+            <MenuIcon size={20} />
+          </button>
+          
+          <div className="nav-brand">
+            <div className="brand-icon-wrapper">
+              <SparklesIcon size={19} />
+            </div>
+            <div className="brand-text">
+              <span className="brand-name">Study Buddy</span>
+              <span className="brand-badge-ai">AI</span>
+            </div>
           </div>
         </div>
 
@@ -124,7 +136,8 @@ const Main = ({ darkMode, setDarkMode }) => {
 
           <div
             className="nav-avatar"
-            title="User Profile"
+            title="User"
+            aria-hidden="true"
           >
             <UserIcon size={18} />
           </div>
@@ -137,14 +150,14 @@ const Main = ({ darkMode, setDarkMode }) => {
           <div className="welcome-section">
             <div className="greet">
               <div className="welcome-badge">
-                <SparklesIcon size={16} />
-                <span>Next-Gen Study Companion</span>
+                <SparklesIcon size={15} />
+                <span>Smart Academic Assistant</span>
               </div>
               <h1>
-                Empower your learning with <span className="gradient-text">Study Buddy</span>
+                What would you like to <span className="gradient-text">learn today?</span>
               </h1>
               <p className="greet-sub">
-                Ask deep technical questions, synthesize core concepts, prepare for exams, or review code algorithms instantly.
+                Ask any question from computer science, engineering, or core subjects. Get structured breakdowns, code samples, and exam revision instantly.
               </p>
             </div>
 
@@ -162,12 +175,12 @@ const Main = ({ darkMode, setDarkMode }) => {
                   >
                     <div className="card-top">
                       <div className="card-icon-pill">
-                        <IconComponent size={18} />
+                        <IconComponent size={17} />
                       </div>
                       <span className="card-category">{item.title}</span>
                     </div>
                     <p className="card-desc">{item.desc}</p>
-                    <span className="card-action">Ask this prompt →</span>
+                    <span className="card-action">Ask this topic →</span>
                   </div>
                 );
               })}
@@ -178,7 +191,7 @@ const Main = ({ darkMode, setDarkMode }) => {
             {/* User Message Bubble */}
             <div className="message-wrapper user-msg">
               <div className="avatar user-avatar">
-                <UserIcon size={18} />
+                <UserIcon size={17} />
               </div>
               <div className="bubble user-bubble">
                 <p>{recentPrompt}</p>
@@ -188,13 +201,13 @@ const Main = ({ darkMode, setDarkMode }) => {
             {/* AI Response Bubble */}
             <div className="message-wrapper bot-msg">
               <div className="avatar bot-avatar">
-                <BotIcon size={20} />
+                <BotIcon size={18} />
               </div>
               <div className="bubble bot-bubble">
                 <div className="bot-header">
                   <div className="model-badge">
                     <SparklesIcon size={14} />
-                    <span>Study Buddy AI</span>
+                    <span>Study Buddy</span>
                   </div>
                   {!loading && resultData && (
                     <button
@@ -205,12 +218,12 @@ const Main = ({ darkMode, setDarkMode }) => {
                     >
                       {copied ? (
                         <>
-                          <CheckIcon size={14} />
+                          <CheckIcon size={13} />
                           <span>Copied</span>
                         </>
                       ) : (
                         <>
-                          <CopyIcon size={14} />
+                          <CopyIcon size={13} />
                           <span>Copy</span>
                         </>
                       )}
@@ -258,11 +271,11 @@ const Main = ({ darkMode, setDarkMode }) => {
               title="Send Prompt (Enter)"
               aria-label="Send message"
             >
-              <SendIcon size={18} />
+              <SendIcon size={17} />
             </button>
           </div>
           <div className="footer-bar">
-            <span>Powered by Google Gemini 3.5 Flash Lite • Double check crucial facts.</span>
+            <span>Powered by Gemini • Study Buddy can make mistakes, always verify critical information.</span>
           </div>
         </div>
       </div>

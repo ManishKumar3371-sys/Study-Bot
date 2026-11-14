@@ -6,6 +6,7 @@ const App = () => {
     const [darkMode, setDarkMode] = useState(() => {
         return localStorage.getItem('studyBuddyTheme') === 'dark';
     });
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         localStorage.setItem(
@@ -16,8 +17,17 @@ const App = () => {
 
     return (
         <div className={`app-shell ${darkMode ? 'dark-mode' : ''}`}>
-            <Sidebar darkMode={darkMode} />
-            <Main darkMode={darkMode} setDarkMode={setDarkMode} />
+            <Sidebar 
+                darkMode={darkMode} 
+                sidebarOpen={sidebarOpen} 
+                setSidebarOpen={setSidebarOpen} 
+            />
+            <Main 
+                darkMode={darkMode} 
+                setDarkMode={setDarkMode} 
+                sidebarOpen={sidebarOpen} 
+                setSidebarOpen={setSidebarOpen} 
+            />
         </div>
     );
 };

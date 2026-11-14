@@ -11,39 +11,71 @@ import {
   SparklesIcon,
 } from "../Icons/Icons.jsx";
 
-const Sidebar = () => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const [extended, setExtended] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const { onSent, prevPrompts, setRecentPrompt, newChat, clearHistory } = useContext(Context);
 
   const loadPrompt = async (prompt) => {
     setRecentPrompt(prompt);
+    if (window.innerWidth <= 768 && setSidebarOpen) {
+      setSidebarOpen(false);
+    }
     await onSent(prompt);
   };
 
+  const handleNewChat = () => {
+    newChat();
+    if (window.innerWidth <= 768 && setSidebarOpen) {
+      setSidebarOpen(false);
+    }
+  };
+
+  const isDrawerOpen = sidebarOpen || extended;
+
   return (
     <>
-      <aside className={`sidebar ${extended ? "extended" : "collapsed"}`}>
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div 
+          className="sidebar-backdrop" 
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside className={`sidebar ${extended ? "extended" : "collapsed"} ${sidebarOpen ? "mobile-open" : ""}`}>
         <div className="top">
-          <button
-            className="menu-btn"
-            onClick={() => setExtended((prev) => !prev)}
-            aria-label="Toggle Navigation Sidebar"
-            title="Toggle Menu"
-          >
-            <MenuIcon size={20} />
-          </button>
+          <div className="sidebar-top-bar">
+            <button
+              className="menu-btn"
+              onClick={() => {
+                if (window.innerWidth <= 768) {
+                  setSidebarOpen(!sidebarOpen);
+                } else {
+                  setExtended((prev) => !prev);
+                }
+              }}
+              aria-label="Toggle navigation drawer"
+              title="Toggle Menu"
+            >
+              <MenuIcon size={20} />
+            </button>
+            {sidebarOpen && (
+              <span className="mobile-drawer-label">Menu</span>
+            )}
+          </div>
 
           <button
-            onClick={() => newChat()}
+            onClick={handleNewChat}
             className="new-chat-btn"
             title="Start New Chat"
           >
             <PlusIcon size={18} />
-            {extended && <span>New Chat</span>}
+            {(isDrawerOpen) && <span>New Chat</span>}
           </button>
 
-          {extended && (
+          {(isDrawerOpen) && (
             <div className="recent-section">
               <div className="recent-header">
                 <span className="recent-title">Recent Chats</span>
@@ -82,11 +114,14 @@ const Sidebar = () => {
         <div className="bottom">
           <button
             className="bottom-item"
-            onClick={() => setShowHelpModal(true)}
+            onClick={() => {
+              setShowHelpModal(true);
+              if (window.innerWidth <= 768) setSidebarOpen(false);
+            }}
             title="Help & Shortcuts"
           >
             <HelpCircleIcon size={19} />
-            {extended && <span>Help & Shortcuts</span>}
+            {(isDrawerOpen) && <span>Help & Shortcuts</span>}
           </button>
 
           <div
@@ -94,7 +129,7 @@ const Sidebar = () => {
             title="System Status"
           >
             <ActivityIcon size={19} />
-            {extended && (
+            {(isDrawerOpen) && (
               <span className="status-badge-wrap">
                 System Active <span className="status-dot"></span>
               </span>
@@ -117,21 +152,22 @@ const Sidebar = () => {
               <button
                 className="close-modal"
                 onClick={() => setShowHelpModal(false)}
+                aria-label="Close"
               >
                 ✕
               </button>
             </div>
             <div className="modal-body">
               <p className="modal-desc">
-                Study Buddy is an AI-powered academic assistant engineered to simplify complex subjects, draft quizzes, explain code algorithms, and enhance self-learning.
+                Study Buddy is a focused, distraction-free study tool designed for students and developers. Works smoothly on both phone and desktop screens without breaking or overflowing.
               </p>
               <div className="shortcut-group">
                 <h4>Quick Tips</h4>
                 <ul>
-                  <li><strong>Enter:</strong> Send message</li>
-                  <li><strong>Shift + Enter:</strong> Add new line in prompt</li>
-                  <li><strong>Prompt Cards:</strong> Click any preset idea on home screen to get instant study answers.</li>
-                  <li><strong>Copy Code/Answer:</strong> Use the copy button in top right of AI response.</li>
+                  <li><strong>Enter:</strong> Send question (on desktop)</li>
+                  <li><strong>Send Button:</strong> Tap on mobile to ask</li>
+                  <li><strong>Tap Cards:</strong> Select any prompt suggestion to get an immediate detailed answer.</li>
+                  <li><strong>Copy:</strong> Copy code blocks or full answers with a single tap.</li>
                 </ul>
               </div>
             </div>
